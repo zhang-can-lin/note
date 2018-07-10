@@ -1,11 +1,7 @@
-31 vim 8.0编译、配置、插件
-	参考
+
 http://blog.csdn.net/windeal3203/article/details/40071641
 https://github.com/yangyangwithgnu/use_vim_as_ide
-31.1 编译、安装
-	卸载旧版本
-dpkg -l | grep vim	//找到vim相关的包
-sudo dpkg -P vim-runtime vim-tiny vim-common vim	//删除旧版本
+
 	安装依赖软件
 sudo apt-get install libncurses5-dev libgnome2-dev libgnomeui-dev \
     libgtk2.0-dev libatk1.0-dev libbonoboui2-dev \
