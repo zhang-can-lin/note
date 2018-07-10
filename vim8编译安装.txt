@@ -1,0 +1,68 @@
+31 vim 8.0编译、配置、插件
+	参考
+http://blog.csdn.net/windeal3203/article/details/40071641
+https://github.com/yangyangwithgnu/use_vim_as_ide
+31.1 编译、安装
+	卸载旧版本
+dpkg -l | grep vim	//找到vim相关的包
+sudo dpkg -P vim-runtime vim-tiny vim-common vim	//删除旧版本
+	安装依赖软件
+sudo apt-get install libncurses5-dev libgnome2-dev libgnomeui-dev \
+    libgtk2.0-dev libatk1.0-dev libbonoboui2-dev \
+    libcairo2-dev libx11-dev libxpm-dev libxt-dev python-dev \
+python3-dev ruby-dev lua5.1 lua5.1-dev libperl-dev git
+下载vim源码
+cd ~/wkdir
+git clone https://github.com/vim/vim.git
+	配置编译源码
+cd vim
+./configure --with-features=huge \
+            --enable-multibyte \
+            --enable-rubyinterp=yes \
+            --enable-pythoninterp=yes \
+            --with-python-config-dir=/usr/lib/python2.7/config-x86_64-linux-gnu \
+            --enable-perlinterp=yes \
+            --enable-luainterp=yes \
+            --enable-gui=gtk2 \
+            --enable-cscope \
+            --prefix=/usr/
+make VIMRUNTIMEDIR=/usr/share/vim/vim80/
+配置python2.7路径根据实际，ubuntu14.4中python2 python3只能选一个，ubuntu默认使用2.7.6版本，那么选python2.7.6好了
+--prefix=/usr/	安装目录为/usr/share/vim/vim80，sudo make install时将会自动添加share/vim/vim80
+使用./configure –help及make –help查看帮助
+安装
+cd ~/mkdir/vim
+sudo make install	//sudo make uninstall 可将之前安装配置清除掉
+	设置vim为默认编辑器，使用update-alternatives
+sudo update-alternatives --install /usr/bin/editor editor /usr/bin/vim 1
+sudo update-alternatives --set editor /usr/bin/vim
+sudo update-alternatives --install /usr/bin/vi vi /usr/bin/vim 1
+sudo update-alternatives --set vi /usr/bin/vim
+	参考：
+http://blog.csdn.net/a464057216/article/details/52821171
+https://github.com/Valloric/YouCompleteMe/wiki/Building-Vim-from-source	
+31.2 vim还能使用退格、方向键
+	vimrc添加
+set nocompatible
+set backspace=indent,eol,start
+31.3 vimrc配置文件调用流程
+	执行vim –version时会打印相关信息，包含下面信息
+   system vimrc file: "$VIM/vimrc"
+     user vimrc file: "$HOME/.vimrc"
+ 2nd user vimrc file: "~/.vim/vimrc"
+      user exrc file: "$HOME/.exrc"
+ defaults file: "$VIMRUNTIME/defaults.vim"
+  fall-back for $VIM: "/usr/share/vim"	
+VIM回落值，当系统没有此环境变量时，就使用/usr/share/vim，上面所列出的配置文件中，vim从上到下读取。通常使用前面两个。
+执行下面命令，发现vimrc实现是指向/etc/vim/vimrc的软链接。
+ls -l /urs/share/vim/vimrc	
+	配置文件读取顺序
+$VIM/vimrc			//全局，整个系统适用
+$HOME/.vimrc			//当前用户适用
+$HOME/.vim/vimrc		//推荐使用，不使用上面的.vimrc，所有个人配置都放在.vim目录下，方便移植
+	当.vimrc及.vim/vimrc文件都不存在时，将会读取$VIMRUNTIME/defaults.vim
+	查看vim当前关键的几个变量，从这变量可知读取配置文件是哪个
+:echo $VIM
+:echo $HOME
+:echo $VIMRUNTIME
+

@@ -1,0 +1,18 @@
+
+21:50 2017/7/13
+
+	linux 下制作静态库(.a)文件
+
+1. 在.c文件里分别实现函数 bill.c, fred.c
+2. 使用gcc -c选项对.c文件编译, 生成对应的.o文件
+	gcc -c bill.c fred.c
+	ls *.o
+3.使用ar创建归档文件并将目标文件(.o)添加进去
+	ar crv libfoo.a bill.o fred.o
+	//某些unix上需要为函数库生成一个内容表
+	ranlib libfoo.a
+4.创建头文件lib.h, 包含对bill() 和fred()的声明
+5.在测试文件(test.c)中添加头文件 
+	#include "lib.h"
+6.编译文件, 链接到静态库文件
+	gcc -s -o programe test.c -L./ -lfoo

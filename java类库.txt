@@ -1,0 +1,18 @@
+	类库实际上是一组类文件, 其中每个文件都有一个public类和任意数量的非public类,
+	因此每个文件都有一个构件, 如果希望这些构件(每一个都有它们自己的.java和.class文件)  从属于同一个群组,
+	就可以使用package关键字
+
+	如果使用package关键字, 它必须是除注释以外的第一句程序代码.在文件起始处写
+	package access;
+就表示该编译单元是名为 access 类库的一部分, 或者换种说法, 
+你正在声明该编译单元中的pbulic类名称是位于access名称的保护伞下面.任何想要使用该名称的人都必须指出全名或者与access结合使用关键字import(请注意, Java包的命名规则全部使用小写字母, 中间的名称也是如此)
+	例如, 假设文件名称是MyClass.java, 这就意味着该文件有且只有一个public类, 该public类的类名也必须是MyClass(注意大小写)
+	//: access/mypackage/MyClass.java
+	package.access.mypackage;
+	public class MyClass {}
+现在, 如果想使用MyClass或者access中的任何public类, 都必须使用关键字import来使access中的名称可用, 另一个选择是给出完整名称:
+	1. access.mypackage.MyClass m = new access.mypackage.MyClass();
+	2. import access.package.*
+	   MyClass m = new MyClass();
+
+作为一名类库设计人员, 很有必要牢记住: package 和 import关键字允许你做的, 就是将单一的全局名字空间分隔开, 使得无论多少人使用Internet以及Java开始编写类, 都不会出现名称冲突问题
