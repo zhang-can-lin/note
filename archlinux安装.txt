@@ -1,0 +1,85 @@
+
+
+pacman -S git go base-devel vim
+
+
+0. 安装vm tools
+	pacman -S open-vm-tools open-vm-tools-modules
+	pacman -S gtkmm
+	
+	vim /usr/lib/systemd/system/vmtoolsd.service 
+	[service] 下面增加一行  KillSignal=SIGKILL
+
+	开机自动启动
+	cat /proc/version > /etc/arch-release
+	systemctl enable vmtoolsd
+	systemctl restart vmtoolsd
+
+
+
+
+
+1. 增加用户
+useradd -m -G wheel zhangcl
+passwd zhangcl
+
+export VISUAL=vim
+visudo 添加权限
+
+
+2. 换源
+	sudo vim /etc/pacman.conf
+	
+	增加下面2行
+	[archlinuxcn]
+	Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch
+	
+	更新兵导入keyring
+	sudo pacman -Sy archlinuxcn-keyring
+	
+ 
+3. 安装yay （普通用户身份）
+	
+	export GOSUMDB=off
+	export GOPROXY=https://goproxy.cn
+	
+	git clone https://aur.archlinux.org/yay.git
+	cd yay/
+	makepkg -si
+	
+	
+4. 桌面环境：
+	yay -S lightdm  lightdm-gtk-greeter
+	yay -S xorg i3-gaps polybar dunst   xorg-init curl \
+               zsh wqy-microhei wqy-zenhei pulseaudio pulseaudio-alsa \
+               pamixer nitrogen lxappearance pavucontrol  \
+               pikaur alacritty nerd-fonts-complete flameshot git playerctl python-gobject \
+               libsodium xclip thunar
+			   
+			   
+5. 字体
+	yay -S adobe-source-han-sans-cn-fonts adobe-source-han-sans-tw-fonts adobe-source-han-sans-jp-fonts
+	yay -S ttf-liberation
+
+
+6. 输入法
+	sudo pacman -S fcitx5-im  fcitx5-chinese-addons  fcitx5-rime fcitx5-material-color
+	
+	/etc/environment 添加下面几行
+	GTK_IM_MODULE=fcitx
+	QT_IM_MODULE=fcitx
+	XMODIFIERS=@im=fcitx
+	SDL_IM_MODULE=fcitx 
+
+	i3 配置中增加下面一行
+	exec_always --no-startup-id fcitx5
+	
+7. 设置分辨率
+	xrandr
+	cvt 1920 1080
+	xrandr --newmode  "1920x1080_60.00"  173.00  1920 2048 2248 2576  1080 1083 1088 1120 -hsync +vsync
+	xrandr --addmode  Virtual-1  "1920x1080_60.00"
+	xrandr --output   Virtual-1 --mode  "1920x1080_60.00"
+
+	
+	
